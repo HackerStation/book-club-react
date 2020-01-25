@@ -10,25 +10,29 @@ class SearchBooks extends React.Component {
   };
 
   updateQuery = query => {
-    BooksAPI.search(query).then(books => {
-      if (books) {
-        this.setState({
-          query: query,
-          books: books
-        });
-      } else {
-        this.setState({ query: query });
-      }
-    });
+    this.setState({ query: query });
   };
 
-  clearQuery = () => {
-    this.setState({
-      query: ''
-    });
+  SearchBooks = query => {
+    if (query) {
+      BooksAPI.search(query).then(books => {
+        if (Array.isArray(books)) {
+          this.setState({
+            books: books
+          });
+        }
+      });
+    } else {
+      this.setState({
+        books: []
+      });
+    }
   };
 
   render() {
+    const { books, query } = this.state;
+    console.log(query);
+    console.log(books);
     return (
       <div className='search-books'>
         <div className='search-books-bar'>
@@ -48,23 +52,28 @@ class SearchBooks extends React.Component {
               type='text'
               placeholder='Search by title or author'
               value={this.state.query}
-              onChange={e => this.updateQuery(e.target.value)}
+              onChange={e => {
+                this.updateQuery(e.target.value);
+                this.SearchBooks(e.target.value);
+              }}
             />
           </div>
         </div>
         <div className='search-books-results'>
           <ol className='books-grid'>
-            {this.state.books.map((book, id) => {
-              return (
-                <li key={id}>
-                  <Book
-                    title={book.title}
-                    authors={book.authors}
-                    imageLink={book.imageLinks.smallThumbnail}
-                  />
-                </li>
-              );
-            })}
+            {Array.isArray(books)
+              ? books.map((book, id) => {
+                  return (
+                    <li key={id}>
+                      <Book
+                        title={book.title}
+                        authors={book.authors}
+                        imageLink={book.imageLinks.smallThumbnail}
+                      />
+                    </li>
+                  );
+                })
+              : null}
           </ol>
         </div>
       </div>
