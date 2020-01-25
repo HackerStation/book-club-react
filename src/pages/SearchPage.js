@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import * as BooksAPI from '../utils/BooksAPI';
+import Book from '../components/Book';
 
 class SearchPage extends React.Component {
   state = {
@@ -9,8 +10,18 @@ class SearchPage extends React.Component {
   };
 
   updateQuery = query => {
-    this.setState({
-      query: query.trim()
+    // this.setState({
+    //   query: query.trim()
+    // });
+    BooksAPI.search(query).then(books => {
+      if (books) {
+        this.setState({
+          query: query,
+          books: books
+        });
+      } else {
+        this.setState({ query: query });
+      }
     });
   };
 
@@ -21,12 +32,13 @@ class SearchPage extends React.Component {
   };
 
   componentDidMount() {
-    BooksAPI.getAll().then(books => {
-      this.setState({ books: books });
-    });
+    // BooksAPI.getAll().then(books => {
+    //   this.setState({ books: books });
+    // });
   }
 
   render() {
+    const { books } = this.state;
     return (
       <div className='search-books'>
         <div className='search-books-bar'>
@@ -45,12 +57,25 @@ class SearchPage extends React.Component {
             <input
               type='text'
               placeholder='Search by title or author'
+              value={this.state.query}
               onChange={e => this.updateQuery(e.target.value)}
             />
           </div>
         </div>
         <div className='search-books-results'>
-          <ol className='books-grid'></ol>
+          <ol className='books-grid'>
+            {this.state.books.map((book, id) => {
+              return (
+                <li key={id}>
+                  <Book
+                    title={book.title}
+                    authors={book.authors}
+                    imageLink={book.imageLinks.smallThumbnail}
+                  />
+                </li>
+              );
+            })}
+          </ol>
         </div>
       </div>
     );
