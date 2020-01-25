@@ -28,14 +28,7 @@ class SearchBooks extends React.Component {
     });
   };
 
-  componentDidMount() {
-    // BooksAPI.getAll().then(books => {
-    //   this.setState({ books: books });
-    // });
-  }
-
   render() {
-    const { books } = this.state;
     return (
       <div className='search-books'>
         <div className='search-books-bar'>
