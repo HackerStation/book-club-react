@@ -35,6 +35,9 @@ const ListBooks = props => {
                         title={book.title}
                         authors={book.authors}
                         imageLink={book.imageLinks.smallThumbnail}
+                        onShelfSelect={(book, shelf) =>
+                          props.updateBookShelf(book, shelf)
+                        }
                       />
                     </li>
                   );
@@ -54,6 +57,9 @@ const ListBooks = props => {
                         title={book.title}
                         authors={book.authors}
                         imageLink={book.imageLinks.smallThumbnail}
+                        onShelfSelect={(book, shelf) =>
+                          props.updateBookShelf(book, shelf)
+                        }
                       />
                     </li>
                   );
@@ -73,6 +79,9 @@ const ListBooks = props => {
                         title={book.title}
                         authors={book.authors}
                         imageLink={book.imageLinks.smallThumbnail}
+                        onShelfSelect={(book, shelf) =>
+                          props.updateBookShelf(book, shelf)
+                        }
                       />
                     </li>
                   );

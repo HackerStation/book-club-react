@@ -13,7 +13,7 @@ class SearchBooks extends React.Component {
     this.setState({ query: query });
   };
 
-  SearchBooks = query => {
+  searchBooks = query => {
     if (query) {
       BooksAPI.search(query).then(books => {
         if (Array.isArray(books)) {
@@ -30,15 +30,11 @@ class SearchBooks extends React.Component {
   };
 
   render() {
-    const { books, query } = this.state;
-    console.log(query);
-    console.log(books);
+    const { books } = this.state;
     return (
       <div className='search-books'>
         <div className='search-books-bar'>
-          <Link className='close-search' to='/'>
-            Close
-          </Link>
+          <Link className='close-search' to='/' />
           <div className='search-books-input-wrapper'>
             {/*
                   NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -54,7 +50,7 @@ class SearchBooks extends React.Component {
               value={this.state.query}
               onChange={e => {
                 this.updateQuery(e.target.value);
-                this.SearchBooks(e.target.value);
+                this.searchBooks(e.target.value);
               }}
             />
           </div>
@@ -62,13 +58,17 @@ class SearchBooks extends React.Component {
         <div className='search-books-results'>
           <ol className='books-grid'>
             {Array.isArray(books)
-              ? books.map((book, id) => {
+              ? books.map(book => {
                   return (
-                    <li key={id}>
+                    <li key={book.id}>
                       <Book
+                        id={book.id}
                         title={book.title}
                         authors={book.authors}
                         imageLink={book.imageLinks.smallThumbnail}
+                        onShelfSelect={(book, shelf) =>
+                          this.props.updateBookShelf(book, shelf)
+                        }
                       />
                     </li>
                   );
